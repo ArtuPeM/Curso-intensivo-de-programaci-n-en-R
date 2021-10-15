@@ -1,7 +1,6 @@
 ---
 title: "Introducción a R"
 author: "Arturo Pérez"
-date: "29/1/2021"
 output:
   html_document:
     keep_md: yes
