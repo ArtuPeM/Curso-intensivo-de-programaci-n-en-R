@@ -350,7 +350,7 @@ setwd("../") ##nos movemos una carpeta arriba.
 ```
 **2. Crear un directorio en donde colocaremos nuestras tablas de datos descargadas**
 Esto es más que nada para mantener limpieza dentro de nuestro directorio del proyecto. Se hace uso de la función `dir.create()`
-```{r}
+```{r, eval=FALSE}
 if(!file.exists("data")){
      dir.create("data")
 }
