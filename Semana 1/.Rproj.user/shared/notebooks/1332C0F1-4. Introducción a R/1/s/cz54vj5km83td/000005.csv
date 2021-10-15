@@ -1,0 +1,6 @@
+"0","dataxlsx <- read.xlsx(""./data/data.xlsx"", sheetIndex = 1 , header = TRUE, rowIndex = 1:5, colIndex = c(1,3,5))
+"
+"2","Error: unexpected symbol in:
+""dataxlsx <- read.xlsx(""./data/data.xlsx"", sheetIndex = 1 , header = TRUE, rowIndex = 1:5, colIndex = c(1,3,5)
+dataxlsx""
+"

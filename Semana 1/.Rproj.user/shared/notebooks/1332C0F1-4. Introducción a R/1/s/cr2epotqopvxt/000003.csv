@@ -1,0 +1,10 @@
+"0","download.file(url, destfile = ""./data/mexicocovid19.zip"")
+"
+"2","trying URL 'http://datosabiertos.salud.gob.mx/gobmx/salud/datos_abiertos/historicos/2021/01/datos_abiertos_covid19_28.01.2021.zip'
+"
+"2","Content type 'application/x-zip-compressed'"
+"2"," length 96790322 bytes (92.3 MB)
+"
+"2","downloaded 92.3 MB
+
+"
