@@ -416,6 +416,7 @@ La memoria requerida para leer una tabla de datos grande se calcula de la siguie
 ```{r}
 #filas  columas byte/objeto
 x <- 1500000 * 120 * 8
+x
 x/10e8
 ```
 
@@ -450,12 +451,14 @@ Podemos utilizar los 3 operadores anteriormente mencionados para extraer element
 ```{r}
 lista <- list(data=matrix(1:30, 6, 5), matriz=head(as.matrix(airquality), 20), vector1=rnorm(10))
 head(lista)
+lista["data"]
+lista[["matriz"]]
 ## ver la clase de los objetos extraidos
 class(lista["data"])
 class(lista[["matriz"]])
 
 ##----------
-lista$data
+lista$vector1
 ##sinónimos
 lista[c("data","vector1")]; lista[c(1,3)]
 
@@ -466,7 +469,7 @@ lista[[3]][5]
 lista$vector1[5]
 
 ##concordancia parcial
-lista$d
+lista$d 
 lista[["d", exact=FALSE]]
 
 ```
@@ -479,9 +482,11 @@ data1[1,]
 data1[c(3,5,7), 1:3]
 ## Columnas
 head(data1[,3])
-head(data1$Estatus_capacidad_hospitalaria)
+head(data1$Estatus_capacidad_UCI)
 head(data1[data1$Institucion == "EDOMEX",])
-head(data1[data1$Institucion == "EDOMEX", "Institución"])
+head(data1[data1$Institucion == "EDOMEX", c(1,5)])
+head(data1[data1$Institucion == "EDOMEX", 
+           c("Fecha","Institucion","Estatus_capacidad_UCI")])
 ```
 
 ### Extrayendo y eliminando valores perdidos
@@ -490,9 +495,9 @@ Por lo general queremos eliminar aquellos valores NA que en realidad no aportan 
 1. Primero identificamos si existen valores perdidos, utilizando las funciones `is.na()`, `complete.cases()`
 2. Eliminarlos directamente utilizando la función `na.omit()`
 
-Paso 1
+Pasos a seguir
 ```{r}
-## Identificando los valores NA.
+## 1 Identificando los valores NA.
 head(complete.cases(airquality))
 head(is.na(airquality))
 
@@ -501,11 +506,14 @@ nrow(airquality)
 sum(is.na(airquality))
 sum(!is.na(airquality))
 
-## eliminando los valores NA de una tabla o matriz
+## 2 eliminando los valores NA de una tabla o matriz
 head(airquality[complete.cases(airquality),],10)
-complete.cases(airquality)
-### !is.na sólo funciona con vectores
+### !is.na funciona mejor con vectores
+## vectores
 head(airquality$Solar.R[!is.na(airquality$Solar.R)])
+head(airquality[!is.na(airquality$Solar.R),"Solar.R"])
+## tabla de datos sin NA utilizando !is.na
+head(airquality[!is.na(airquality$Solar.R),])
 
 ## O bien con la función na.omit
 head(na.omit(airquality))
@@ -526,19 +534,27 @@ if (x>=10){
 } else {
   y <- 1+2
 }
+
+  
+if (x>=10){y <- 1+1} else {y <- 1+2}
 y
 
-if (x<10){
-     y <- 2+2
-}
+x <- 5
+if (x<10){y <- 2+2}
 y
 ```
 
 ### Bucle for
 Es el operador para bucles más común. La idea es tener un indice de búcle **i** (podemos tener más de un índice de blucle j,l,k,etc.). que cubre una secuencia de números enteros (integrer), números específicos, etc.
+
 ```{r}
 x <- vector("numeric", 20)
 for (i in 1:20) {
+     x[i] <- 2+i
+}
+
+x <- vector("numeric", 20)
+for (i in c(1,5,7,8)) {
      x[i] <- 2+i
 }
 x
@@ -550,12 +566,11 @@ Se pueden anidar los bucles for. Por ejemplo entre filas y columnasde una tabla.
 x <- matrix(1:15, 5, 3)
 x
 
-for (i in seq_len(nrow(x))) {
-     for (j in seq_len(ncol(x))) {
+for (i in 1:5) {
+     for (j in 1:3) {
           print(x[i,j])
      }
 }
-x
 ```
 
 ### bucle while
@@ -571,8 +586,8 @@ En esta condición el loop se detiene cuando alguna de las dos condiciones estab
 
 Hay que tener cuidado porque podemos crear un loop infinito.
 
-### next break y repeat 
-Interrumpen el flujo de un programa. Por ejemplo si tenemos un código y dentro de ese código hay un loop y dentro de ese loop tenemos una condición que dé como resultado break, Next o Repeat, lo que harán será romper el loop y pasar a la siguiente parte del código.
+### next y break
+Interrumpen el flujo de un programa. Por ejemplo si tenemos un código y dentro de ese código hay un loop y dentro de ese loop tenemos una condición que dé como resultado break o Next, lo que harán será romper el loop y pasar a la siguiente parte del código.
 
 ```{r}
 #BREAK
