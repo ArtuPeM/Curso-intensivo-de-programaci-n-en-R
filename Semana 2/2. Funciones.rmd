@@ -175,6 +175,7 @@ cbind(airquality[1:10,1:3], DNase[1:10,])
 paste("a", "b", "c", sep = ":")
 paste("a", "b", "c", "d", "hola", "adios", se = ":")
 ```
+
 ## 3 Reglas de ámbito
 ### Symbol binding
 ¿Cómo sabe R qué valor asignar a qué símbolo cuando escribo una función?
@@ -187,6 +188,9 @@ Cuando R intenta unir valores a un símbolo, busca a través de una serie de ent
 **Entorno**: Es una colección de objetos y valores o símbolos y valores.
 
 Esta búsqueda tiene un orden. Por ejemplo, cuando buscamos un objeto en R, este lo busca en el entorno global por nombre y símbolo, haciendo el match que buscamos, si el objeto no está ahí, entonces lo busca en los diferentes paquetes de R en este caso el paquete *stats*, si este no está ahi, lo busca en el paquete *graphics* y así sucesivamente hasta llegar al paquete *base*. Sin embargo, no hay que asumir que el programa tiene todo lo que necesitamos.
+```{r}
+
+```
 
 Cargar un paquete con `library()` hace que este paquete quede en la posición 2 de búsqueda moviendo un lugar al resto de paquetes.
 ```{r}
@@ -196,12 +200,14 @@ library(rafalib)
 
 Sin miedo al éxito nosotros podemos nombrar un objeto llamado **sd** y al mismo tiempo una función que se llame **sd()** y uno no interferirá con el funcionamiento del otro.
 ```{r eval=FALSE}
+mean <- rnorm(40)
+mean(mean)
+
 mean <- function(mean, otro){
      y <- otro+mean
-     mean(y)
+     base::mean(y)
 }
-
-mean(4,5)
+mean(4,3)
 ```
 
 
@@ -225,6 +231,13 @@ Hay dos formas: utilizando las reglas de *ámbito léxico* y las reglas de *ámb
 **Reglas de ámbito léxico**
 
 Esta regla nos dice que *"los valores de variables libres serán buscados en el entorno en el cual la función fue definida"*
+```{r}
+remove(cosita)
+f <- function(x,y){
+    x^2 + y/cosita
+}
+f(5,6)
+```
 
         Entorno: Colección de pares (símbolos asociados a un valor)
 
@@ -232,10 +245,10 @@ Cada paquete en R tiene un nombre y un entorno asociado.
 
 Las funciones en R están asociadas a un entorno entonces, para buscar una variable libre:
 
-        1. Si el valor de un símbolo no está en el entorno 
-           donde la función fue creada, la búsqueda continua
+        1. Si el valor de un símbolo no está en el            entorno 
+           donde la función fue creada, la búsqueda            continua
            con el entorno "padre".
-        2. Esto se vuelve escalonado, hasta llegar al nivel
+        2. Esto se vuelve escalonado, hasta llegar            al nivel
            top de entornos padre.
                 
                 TOP: global enviroment.
@@ -260,11 +273,12 @@ Lexico y dinámico
 y <- 10
 f <- function(x){ ##ambito léxico
         y <- 2
-        y^2+g
+        y^2+g(x)
 }
 g <- function(x){ ##ámbito dinámico
         x*y
 }
+f(4)
 ```
 
 Cuando una función es definida en el entorno global y es subsecuentemente llamado de este entorno, el entorno de definición y el entorno de llamada es el mismo y da apariencia de ámbito dinámico
