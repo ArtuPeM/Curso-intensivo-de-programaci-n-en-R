@@ -26,3 +26,5 @@ comp.2.grupos <- function(grupo1, grupo2){
 }
 
 comp.2.grupos(DNase$conc, DNase$density)
+
+## 3
