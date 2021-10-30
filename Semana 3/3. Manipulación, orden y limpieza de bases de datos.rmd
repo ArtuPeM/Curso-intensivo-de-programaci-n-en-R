@@ -5,32 +5,32 @@ output:
      html_document:
           keep_md: true
 ---
+
 ## Datos crudos y datos procesados.
 
-- **Datos**: Valores de variables cuantitativas o cualitativas pertenecientes a un grupo de objetos (población, etc.)
+-   **Datos**: Valores de variables cuantitativas o cualitativas pertenecientes a un grupo de objetos (población, etc.)
 
-1. **Cualitativos**: País de orígen, sexo, tratamiento, etc.
-2. **Cuantitativos**: Altura, peso, presión sanguínea, etc.
+1.  **Cualitativos**: País de orígen, sexo, tratamiento, etc.
+2.  **Cuantitativos**: Altura, peso, presión sanguínea, etc.
 
 ### Datos crúdos
-- Fuente original de los datos, es decir, son los datos crudos.
-- Muchas veces difícil de utilizar para análisis de datos
-- Analizar datos implica procesamiento de los mismos.
-- Procesar los datos crúdos.
 
-Pueden ser datos binarios, algún excel sin formato, datos obtenidos de forma manual, etc. 
+-   Fuente original de los datos, es decir, son los datos crudos.
+-   Muchas veces difícil de utilizar para análisis de datos
+-   Analizar datos implica procesamiento de los mismos.
+-   Procesar los datos crúdos.
 
-Estos datos sabemos que están en el formato correcto si:
-- No manipulé nada en los datos.
-- No removí nada de ellos.
-- No los resumí en algún sentido.
+Pueden ser datos binarios, algún excel sin formato, datos obtenidos de forma manual, etc.
+
+Estos datos sabemos que están en el formato correcto si: - No manipulé nada en los datos. - No removí nada de ellos. - No los resumí en algún sentido.
 
 ### Datos procesados
-- Datos listos para el análisis
-- Procesar datos implica: Unir, extraer, transformar, etc.
-- Dependiendo del campo en el que se esté trabajando, hay estándares para procesar. P.E: Genética.
-- Todos los pasos deben ser registrados. El preprocesamiento siempre es el componente más importante del análisis de datos. 
-- **Tener cuidado en todos los pasos realizados y en lo que se hace. Comprender que está pasando en el procesamiento de los datos**
+
+-   Datos listos para el análisis
+-   Procesar datos implica: Unir, extraer, transformar, etc.
+-   Dependiendo del campo en el que se esté trabajando, hay estándares para procesar. P.E: Genética.
+-   Todos los pasos deben ser registrados. El preprocesamiento siempre es el componente más importante del análisis de datos.
+-   **Tener cuidado en todos los pasos realizados y en lo que se hace. Comprender que está pasando en el procesamiento de los datos**
 
 ### Ejemplo de los pasos a seguir en el procesamiento de los datos
 
@@ -42,16 +42,18 @@ $$
 
 A los datos crudos los debemos convertir en un set de datos ordenados, para ello debemos contar con los siguientes componentes:
 
-1. Datos crudos -> Archivos de donde extraemos la información
-2. Data set ordenado.
-3. Un libro de códigos describiendo cada variable y sus valores en el data set ordenado. P.e. Describir las unidades de medida de alguna variable.
-4. Todo el código de programación utilizado para procesar los datos. Es decir reportar los pasos exactos. 
+1.  Datos crudos -\> Archivos de donde extraemos la información
+2.  Data set ordenado.
+3.  Un libro de códigos describiendo cada variable y sus valores en el data set ordenado. P.e. Describir las unidades de medida de alguna variable.
+4.  Todo el código de programación utilizado para procesar los datos. Es decir reportar los pasos exactos.
 
 ### Meta de procesamiento para los datos ordenados.
-1. Cada variable medida debe estar en una columna. Variable x columna.
-2. Cada observación de esta variable debe estar en una línea diferente.
-3. Debe haber una tabla para cada tipo de variable.
-4. Cuando se tienen múltiples tablas se debe incluir una columna en la tabla que les permita unirse (*merging data*)
+
+1.  Cada variable medida debe estar en una columna. Variable x columna.
+2.  Cada observación de esta variable debe estar en una línea diferente.
+3.  Debe haber una tabla para cada tipo de variable.
+4.  Cuando se tienen múltiples tablas se debe incluir una columna en la tabla que les permita unirse (*merging data*)
+
 ```{r, echo=FALSE}
 x <- na.omit(airquality)[1:20,]
 y <- na.omit(airquality)[21:40,]
@@ -63,39 +65,42 @@ rbind(x,y)
 ```
 
 ### TIPS
-- La primera fila deben ser los nombres de las variables (columnas)
-- Los nombres de las columnas deben ser leíbles. 
+
+-   La primera fila deben ser los nombres de las variables (columnas)
+-   Los nombres de las columnas deben ser leíbles.
 
 ## Lista de instrucciones.
+
 Debes poder obtener el mismo resultado una vez que reproceses los datos crudos una y otra vez. Si no es así, hay algo mal en tu pipeline y hay que corregirlo.
 
-1. Script de código
-2. El input para el script son los datos crudos
-3. El output son los datos ordenados y procesados
-4. No hay parámetros para el script, el resultado debe ser el mismo una y otra vez
+1.  Script de código
+2.  El input para el script son los datos crudos
+3.  El output son los datos ordenados y procesados
+4.  No hay parámetros para el script, el resultado debe ser el mismo una y otra vez
 
 ## PASOS.
-1. Establecer directorio
-2. Descargar archivos. 
-3. Leerlos en R.
-4. Procesarlos.
-5. Analizarlos.
-6. Visualizarlos
-7. Interpretarlos
+
+1.  Establecer directorio
+2.  Descargar archivos.
+3.  Leerlos en R.
+4.  Procesarlos.
+5.  Analizarlos.
+6.  Visualizarlos
+7.  Interpretarlos
 
 ## Paquete "data.table"
-Es más rápido y eficiente que los comandos típicos para manipular tablas de datos. 
-- Todas las funciones que tiene `data.frame()` aplican para `data.table()`
-- Es más rápido extrayendo, agrupando y actualizando variables.
-- Tiene cierta curva de aprendizaje
 
-1. Descargar el paquete y cargarlo.
+Es más rápido y eficiente que los comandos típicos para manipular tablas de datos. - Todas las funciones que tiene `data.frame()` aplican para `data.table()` - Es más rápido extrayendo, agrupando y actualizando variables. - Tiene cierta curva de aprendizaje
+
+1.  Descargar el paquete y cargarlo.
+
 ```{r, eval=FALSE}
 install.packages("data.table")
 library(data.table)
 ```
 
-2. Creando data frames con `data.frame()` y `data.table()`
+2.  Creando data frames con `data.frame()` y `data.table()`
+
 ```{r}
 library(data.table)
 
@@ -108,20 +113,23 @@ head(DT)
 
 ```
 
-3. Podemos ver todas las tablas de datos en la memoria
+3.  Podemos ver todas las tablas de datos en la memoria
+
 ```{r}
 tables()
 ```
 
-4. Al extraer es algo diferente en las filas, no usamos las comas para diferenciar filas de columnas, automáticamente nos da las filas.
+4.  Al extraer es algo diferente en las filas, no usamos las comas para diferenciar filas de columnas, automáticamente nos da las filas.
+
 ```{r}
 DT[3]
 DT[c(2,3)]
 ```
 
-5. Sin embargo, en las columnas es un poco diferente. Se hace uso de expresiones (el argumento que va después de la coma es una expresión). Una expresión en R es una colección de estados encerrados entre **{}**
+5.  Sin embargo, en las columnas es un poco diferente. Se hace uso de expresiones (el argumento que va después de la coma es una expresión). Una expresión en R es una colección de estados encerrados entre **{}**
 
-- Calcular valores para variables utilizando expresiones. En este caso aplicamos funciónes en la tabla de datos a dos columnas de la tabla creada con `data.table()` 
+-   Calcular valores para variables utilizando expresiones. En este caso aplicamos funciónes en la tabla de datos a dos columnas de la tabla creada con `data.table()`
+
 ```{r}
 ## media de la columna "x" y la suma de la columna "Z" utilizando list()
 DT[,list(mean(x), sum(z))]
@@ -130,7 +138,8 @@ DT[,list(mean(x), sum(z))]
 DT[,table(y)]
 ```
 
-- Añadir nuevas columnas, en donde la primera expresión es el nombre de la columna seguido de dos puntos (":") y un igual ("=") y finalmente la información que queremos meter en esa nueva columna
+-   Añadir nuevas columnas, en donde la primera expresión es el nombre de la columna seguido de dos puntos (":") y un igual ("=") y finalmente la información que queremos meter en esa nueva columna
+
 ```{r}
 DT$z+3
 DT[, w:=z^2]
@@ -138,12 +147,14 @@ head(DT)
 ```
 
 No hay que sObreescribir nuevamente la tabla, con este paquete evitamos el uso de memoria extra al crear una tabla nueva, **SE MODIFICA LA TABLA ORIGINAL**
+
 ```{r}
 ## ES LA MISMA TABLA
 DT2 <- DT
 ```
 
 EJERCICIO: Interpretar qué se está haciendo en las siguientes expresiones
+
 ```{r}
 2+2; 3+4
 DT[, m:={temp <- x+z; log2(temp+5)}]
@@ -152,8 +163,11 @@ DT[, b:= mean(x+w), by=a]
 ```
 
 ## Extrayendo y ordenando datos.
+
 ### Extrayendo datos
+
 Extracción típica utilizando los operadores **[]**
+
 ```{r}
 set.seed(12345)
 data <- na.omit(airquality)
@@ -167,7 +181,8 @@ data[1:2, "Solar.R"]
 
 Sin embargo podemos hacer extracciones mucho más sofisticadas y precisas. Generalmente se hacen antes de la coma, es decir, en donde extraemos las filas.
 
-1. Extrayendo datos utilizando **AND**(&), **OR**(|) y la función `which()`
+1.  Extrayendo datos utilizando **AND**(&), **OR**(\|) y la función `which()`
+
 ```{r}
 #AND
 head(data[(data$Ozone>=50 & data$Wind<=10),])
@@ -179,8 +194,8 @@ head(data[(data$Ozone<=50 | data$Wind>=11),])
 head(data[which(data$Temp>=90),])
 ```
 
+3.  Buscando valores con características específicas utilizando las expresiones **%in%** o **==**
 
-3. Buscando valores con características específicas utilizando las expresiones **%in%** o **==**
 ```{r, message=FALSE}
 ## %in%
 head(data[data$Month %in% c(5,6),])
@@ -196,9 +211,11 @@ data[data$Mes == "septiembre",]
 ```
 
 ### Ordenando datos
-Podemos ordenar vectores o tablas completas según deseemos. 
 
-1. Vectores: utilizamos la función `sort()`
+Podemos ordenar vectores o tablas completas según deseemos.
+
+1.  Vectores: utilizamos la función `sort()`
+
 ```{r}
 ##Orden creciente
 sort(data$Wind)
@@ -208,18 +225,21 @@ sort(data$Wind, decreasing = TRUE)
 sort(airquality$Ozone, na.last = TRUE)
 ```
 
-2. Data frames: Podemos ordenarlas según alguna variable (columna) que deseemos con la función `order()`.
+2.  Data frames: Podemos ordenarlas según alguna variable (columna) que deseemos con la función `order()`.
+
 ```{r}
 head(data[order(data$Ozone),])
 ```
 
-- Podemos ordenar las tablas por múltiples variables. Se ordena de manera creciente la primera variable, si algún valor de la primera variable se repite, en la segunda variable se ordenará de manera creciente.
+-   Podemos ordenar las tablas por múltiples variables. Se ordena de manera creciente la primera variable, si algún valor de la primera variable se repite, en la segunda variable se ordenará de manera creciente.
+
 ```{r}
 head(data[order(data$Ozone, data$Wind),])
 head(data[order(data$Ozone, data$Wind, decreasing = TRUE),])
 ```
 
-3. Ordenando con el paquete dplyr
+3.  Ordenando con el paquete dplyr
+
 ```{r, message=FALSE}
 library(dplyr)
 starwarsdata <- na.omit(starwars)
@@ -228,57 +248,70 @@ head(arrange(starwarsdata, desc = height))
 ```
 
 ## Resumiendo datos
+
 Resumir datos es clave ya que nos permite ver cosas raras como valores perdidos u otros problemas que necesitas resolver. Por lo tanto es recomendable antes de limpiar los datos, resumir y observar que está contenido dentro de estos. Paara ello se harán uso de las siguientes funciones.
 
 ### 1. Resumenes rápidos
-- `summary()` : Info descriptiva de todas las variables dentro de una tabla de datos
+
+-   `summary()` : Info descriptiva de todas las variables dentro de una tabla de datos
+
 ```{r}
 summary(airquality)
 ```
 
-- `str()` : Nos da la descripción de la tabla. Clases, dimensiones, nombres de las columnas, tipo de variable, etc
+-   `str()` : Nos da la descripción de la tabla. Clases, dimensiones, nombres de las columnas, tipo de variable, etc
+
 ```{r}
 str(airquality)
 ```
 
-- `quantile()`: Nos da los cuantiles de una variable cuantitativa.
+-   `quantile()`: Nos da los cuantiles de una variable cuantitativa.
+
 ```{r}
 quantile(data$Ozone)
 quantile(data$Solar.R, probs = c(.5,.3))
 ```
 
 ### 2. Para contar o determinar si hay al menos un elemento específico dentro del objeto
-- `table()`: Si hay valores repetidos en una variable, cuantifica el número de veces que se repite ese valor.
+
+-   `table()`: Si hay valores repetidos en una variable, cuantifica el número de veces que se repite ese valor.
+
 ```{r}
 table(starwarsdata$eye_color)
 ```
 
-- `sum()`
+-   `sum()`
+
 ```{r}
 sum(starwarsdata$sex=="female")
 sum(is.na(starwars))
 sum(is.na(starwars$height))
 ```
 
-- `any()`: Vector lógico que me devuelve un verdadero o falso si hay algún valor en particular
+-   `any()`: Vector lógico que me devuelve un verdadero o falso si hay algún valor en particular
+
 ```{r}
 any(starwarsdata$skin_color == "pale")
 any(is.na(starwars$height))
 ```
 
-- `all()`
+-   `all()`
+
 ```{r}
 all(starwars$skin_color == "pale")
 all(airquality$Ozone<0)
 ```
 
-- `colSums()`
+-   `colSums()`
+
 ```{r}
 colSums(is.na(airquality))
 ```
 
 ### 3. Buscar relaciones entre variables en el set de datos.
-- `xtabs()`: primer argumento es una fórmula y el segundo la base de datos de donde sacamos la información. Podemos sustituir los nombres de las columnas por un punto "." después del "~" y obtendremos una tabla dividida en todas las columnas del data set
+
+-   `xtabs()`: primer argumento es una fórmula y el segundo la base de datos de donde sacamos la información. Podemos sustituir los nombres de las columnas por un punto "." después del "\~" y obtendremos una tabla dividida en todas las columnas del data set
+
 ```{r}
 colnames(starwars)
 xtabs(mass~name+gender, data = starwars)
@@ -291,12 +324,15 @@ xtabs(`mean weight`~., data = ChickWeight2)
 ```
 
 ## Manipulacion y creación de variables
+
 En ocasiones nos encontraremos con que la base de datos que hemos cargado carece de cierta información, por lo tanto habrá que transformar un poco los datos para obtener los valores que necesitemos y agregarlos a la tabla de datos. Tal es el caso de:
 
 ### 1. Crear secuencias
-Las secuencias son utilizadas para indicar diferentes operaciones en los datos. 
 
--`seq()`: Tiene los argumentos **by** y **length**. **By** indica de cuanto en cuanto va la secuencia y **length** indica el largo de la secuencia. Se utilizan principalmente para hacer un vector que nos permita hacer loops o acceder a extracciones específicas de los datos.
+Las secuencias son utilizadas para indicar diferentes operaciones en los datos.
+
+\-`seq()`: Tiene los argumentos **by** y **length**. **By** indica de cuanto en cuanto va la secuencia y **length** indica el largo de la secuencia. Se utilizan principalmente para hacer un vector que nos permita hacer loops o acceder a extracciones específicas de los datos.
+
 ```{r}
 ## by
 seq(1,20, by=3)
@@ -306,7 +342,9 @@ seq(1,20, length=5)
 ```
 
 ### 2. Extrayendo variables
+
 Creamos variables a partir de la extracción de otras variables
+
 ```{r}
 ChickWeight <- ChickWeight
 ChickWeight$min.time.max.time <- ChickWeight$Time %in% c(0,21)
@@ -314,13 +352,16 @@ head(ChickWeight)
 ```
 
 ### 3. Creando variables binarias
+
 ```{r}
 ChickWeight$time_great_six <- ifelse(ChickWeight$Time>6, TRUE, FALSE)
 head(ChickWeight)
 ```
 
 ### 4. Creando variables categóricas
+
 `cut()`: Tiene 2 argumentos principales, **x** que es un vector o una variable cuantitativa y **breaks** que va a dividir ese vector en distintos grupos que le pidamos
+
 ```{r}
 starwarsdata <- starwarsdata[,1:9]
 
@@ -332,24 +373,24 @@ class(starwarsdata$heightGroups)
 ```
 
 ### Transformaciones comunes
-- `abs()`: Valor absoluto
-- `sqrt()`: Raiz cuadrada
-- `ceiling()`: Reducir a un dígito hacia arriba
-- `floor()`: reducir a un dígito hacia abajo
-- `round()`: redondear, usando el argumento digits redondeamos a 2,3,4, etc. dígitos que queramos 
-- `log()`: Logaritmo natural
-- `log2()`,`log10()`: Otros logaritmos
-- `exp()`: Exponenciando x
+
+-   `abs()`: Valor absoluto
+-   `sqrt()`: Raiz cuadrada
+-   `ceiling()`: Reducir a un dígito hacia arriba
+-   `floor()`: reducir a un dígito hacia abajo
+-   `round()`: redondear, usando el argumento digits redondeamos a 2,3,4, etc. dígitos que queramos
+-   `log()`: Logaritmo natural
+-   `log2()`,`log10()`: Otros logaritmos
+-   `exp()`: Exponenciando x
 
 ## Reacomodando los datos
+
 A veces los datos en R no están ordenados de la manera en la que nosotros deseemos y ha que reordenar o darle forma a los datos. Para ello haremos uso de el paquete **reshape2**.
 
-Recordemos que la meta para un dataset ordenado es:
-1. Cada variable debe formar una columna
-2. Cada observación es una fila
-3. Cada tabla/file guarda datos acerca de algún tipo de observación.
+Recordemos que la meta para un dataset ordenado es: 1. Cada variable debe formar una columna 2. Cada observación es una fila 3. Cada tabla/file guarda datos acerca de algún tipo de observación.
 
-- `melt()`: toma un dataframe y lo reagrupa de forma distinta. Útil cuando tenemos una variable distribuida en diferentes columnas. En el argumento **id** se ponen las variables que van a ser ordenadas y en el argumento **measure.vars** van las variables que serán cohercidas en una sola columna para agrupar el nuevo data set. 
+-   `melt()`: toma un dataframe y lo reagrupa de forma distinta. Útil cuando tenemos una variable distribuida en diferentes columnas. En el argumento **id** se ponen las variables que van a ser ordenadas y en el argumento **measure.vars** van las variables que serán cohercidas en una sola columna para agrupar el nuevo data set.
+
 ```{r}
 library(reshape2)
 lol_champs <- read.csv("./data/lol_champs.csv")
@@ -361,7 +402,8 @@ head(meltedlol)
 head(melt(lol_champs, id=c("Champions", "Position.s."), measure.vars = c("Winrate","BanRate")))
 ```
 
-- `dcast()`: Es una función que le da un formato nuevo a la tabla en una forma particular en un dataframe particular. En este caso, los datos de la función melt los regresamos a su estado anterior. Del mismo modo podemos pasar una función para resumir datos.
+-   `dcast()`: Es una función que le da un formato nuevo a la tabla en una forma particular en un dataframe particular. En este caso, los datos de la función melt los regresamos a su estado anterior. Del mismo modo podemos pasar una función para resumir datos.
+
 ```{r}
 head(dcast(meltedlol, Champions~variable))
 names(starwarsdata)
@@ -371,7 +413,8 @@ meltedstarwars <- melt(starwarsdata, id=c("eye_color", "sex"), measure.vars = c(
 dcast(meltedstarwars, sex~variable, mean)
 ```
 
-- `aggregate()`: Es una función que computa un estadístico en función de ciertas variables. El primer argumento es la variable numérica a la que aplicaremos la función, el argumento **by** va a agrupar la tabla en función de las variables (generalmente categóricas) que yo elija del set de datos y el argumento **FUN** es la función que será aplicada a la variable del primer argumento.
+-   `aggregate()`: Es una función que computa un estadístico en función de ciertas variables. El primer argumento es la variable numérica a la que aplicaremos la función, el argumento **by** va a agrupar la tabla en función de las variables (generalmente categóricas) que yo elija del set de datos y el argumento **FUN** es la función que será aplicada a la variable del primer argumento.
+
 ```{r}
 head(ChickWeight)
 ChickWeight2 <- aggregate(ChickWeight$weight, by= list(ChickWeight$Diet, ChickWeight$Time), FUN=mean)
@@ -382,17 +425,16 @@ head(aggregate(InsectSprays$count, by=list(InsectSprays$spray), FUN=mean))
 ```
 
 ## Paquete "dplyr"
-Es un paquete especialmente diseñado para trabajar con dataframes. Es uno de los paquetes más poderosos para el manejo de bases de datos. 
 
-Las propiedades de dplyr son las siguientes:
-1. Argumentos
-- `funcion(dataframe, qué hacer con ese data frame)`
+Es un paquete especialmente diseñado para trabajar con dataframes. Es uno de los paquetes más poderosos para el manejo de bases de datos.
 
-2. El resultado es un nuevo data frame 
-3. puedo referirme a las columnas directamente sin utilizar alguno de los operadores **$** ó **[]**
+Las propiedades de dplyr son las siguientes: 1. Argumentos - `funcion(dataframe, qué hacer con ese data frame)`
 
-Funciones:
-- `select()`: Sirve para extraer columnas de un dataframe
+2.  El resultado es un nuevo data frame
+3.  puedo referirme a las columnas directamente sin utilizar alguno de los operadores **\$** ó **[]**
+
+Funciones: - `select()`: Sirve para extraer columnas de un dataframe
+
 ```{r}
 library(dplyr)
 names(lol_champs)
@@ -401,34 +443,132 @@ head(select(lol_champs, c(Champions, Range, Title)))
 head(select(lol_champs, -(Release.date:KDA_assists)))
 ```
 
-- `filter()`: Extrae filas de un data frame basado en alguna condición lógica
+-   `filter()`: Extrae filas de un data frame basado en alguna condición lógica
+
 ```{r}
 head(filter(lol_champs, HP>=500))
 ```
 
-- `arrange()`: Reordena las filas de una tabla de datos conservando el orden de las otras columnas
+-   `arrange()`: Reordena las filas de una tabla de datos conservando el orden de las otras columnas
+
 ```{r}
 ## de menor a mayor es por default
-head(arrange(lol_champs, Winrate))
+head(arrange(lol_champs[,c("Champions", "Position.s.", "Winrate", "Minions")], Winrate))
 ## de mayor a menor
-head(arrange(lol_champs, desc(Winrate)))
+head(arrange(lol_champs[,c("Champions", "Position.s.", "Winrate", "Minions")], desc(Winrate)))
 ```
 
-- `rename()`: Renombra las variables de un data frame
+-   `rename()`: Renombra las variables de un data frame
+
 ```{r}
 head(rename(ChickWeight, peso=weight, dia_dieta=Time, pollo=Chick))
 ```
 
-- `mutate()`: Crea y agrega nuevas variables/columnas o transforma variables existentes de un data frame
+-   `mutate()`: Crea y agrega nuevas variables/columnas o transforma variables existentes de un data frame
+
 ```{r}
 head(mutate(ChickWeight2, Pesos2 = `mean weight`*2))
 head(mutate(ChickWeight2, `mean weight`=`mean weight`*2))
 ```
 
-- `group_by()`: divide un data frame de acuerdo a alguna variable categórica
-- `summarise()`: Genera un resumen estadístico de diferentes variables en el data frame
+-   `group_by()`: divide un data frame de acuerdo a alguna variable categórica
+
+```{r}
+grouped.data <- group_by(lol_champs[,c("Champions", "Position.s.", "Winrate", "Minions")], Position.s.)
+head(grouped.data)
+```
+
+-   `summarise()`: Genera un resumen estadístico de diferentes variables en el data frame. funciona muy bien en conjunto con la funcion `group_by()`.
+
+```{r}
+summarise(lol_champs, Winrate=mean(as.numeric(gsub("%", "", lol_champs$Winrate))), 
+          BanRate=sd(as.numeric(gsub("%", "", lol_champs$Winrate))))
+
+## En conjunto con datos a los que se les aplicó la función group_by
+summarise(grouped.data, Minion_mean=mean(Minions))
+
+names(ChickWeight)
+grouped_pollos <- group_by(ChickWeight, Diet)
+summarise(grouped_pollos, media.pesos = mean(weight))
+```
 
 ### operador %>%
 
+Agiliza el uso del paquete dplyr. Se escribe primero el data set, después el operador %\>% y después las funciones.
+
+```{r}
+
+lol_champs %>% select(Champions, Position.s., Adaptive.type, Winrate, Minions, Title) %>% filter(Position.s. == " Middle") %>% group_by(Adaptive.type) %>% summarise(Minions= mean(Minions))
+
+```
+
 ## Uniendo datos
+
+A veces leemos mas de un datatset en R y queremos unir estos datasets basados en algún ID.
+
+Se utiliza la función `merge()` tiene como argumentos **x**, **y** que son los dos dataframes que vamos a unir y **by** que indica que columna tienen en común, **by.x** y **by.y** indican columnas de los dos diferentes dataframes, siendo **by.x** una columna del data frame en el argumento **x** y **by.y** una columna del dataframe puesto en el argumento **y**
+
+```{r, echo=FALSE, message=FALSE}
+library(xlsx)
+educacion.1 <- read.xlsx("./data/Educacion_01.xlsx", header = T, rowIndex = 3:37, sheetIndex = 1)
+educacion.2 <- read.xlsx("./data/Educacion_03.xlsx", header = T, rowIndex = 3:37, sheetIndex = 1)
+educacion.3 <- read.xlsx("./data/Educacion_.xlsx", header = T, rowIndex = 3:37, sheetIndex = 1)
+```
+
+Primero hay que ver qué nombres tienen en común las tablas de datos. Para ello haremos uso de la función `intersect()`
+
+```{r}
+intersect(names(educacion.1), names(educacion.2))
+```
+
+Después las unes por las columnas en común. Si no especificamos las columnas por las que va a unir las tablas lo hace por las variables que tienen en común. El argumento **all** nos indica si hay un valor que aparece en uno pero no en el otro, rellenado con valores **NA** para incluir valores perdidos que no aparecen en el otro dataframe.
+
+```{r}
+##Sinónimos
+head(merge(educacion.1,educacion.2, by.x ="Entidad.federativa", by.y = "Entidad.federativa"))
+head(merge(educacion.1,educacion.2, by = "Entidad.federativa"))
+
+##Sin especificar
+head(merge(educacion.1,educacion.2, all = TRUE))
+```
+
+Otra forma de unir los datos es utilizando la función `join()` del paquete plyr
+
+```{r, message=FALSE}
+library(plyr)
+head(join(educacion.2, educacion.1, by="Entidad.federativa"))
+educ.list <- list(educacion.1, educacion.2, educacion.3)
+head(join_all(educ.list, by = "Entidad.federativa"))
+```
+
 ## Paquete tidyr
+
+Es un paquete que ayuda a reacomodar las tablas de datos cuando tenemos datos desorganizados.
+
+-   `gather()`: Esta función nos sirVe para crear variables de un data set y reordenarlos. Tiene diferentes usos y sus argumentos son un data set, el nombre de las nuevas columnas en donde se van a agrupar las del dataset y aquella columna que no queramos o las columnas que queramos agrupar
+
+1.  Cuando las columnas son valores, no nombres de variables
+
+```{r, message=FALSE}
+library(tidyr)
+names(educacion.1)
+head(gather(educacion.1, Aptitud.Escritura.y.lectura, Count, -c(Entidad.federativa, Total)))
+```
+
+2.  Cuando múltiples variables están almacenadas en una columna. Utilizamos `gather()` y `separate()`
+
+```{r}
+data <- data.frame(materia=c("fisica","matematicas","español"), M_sj1=c(5,7,8), M_sj2=c(8,9,9), H_sj1=c(10,7,6), H_sj2=c(7,9,7))
+
+data2 <- gather(data, sex_suj, calificacion,-materia)
+
+separate(data2, sex_suj, into = c("sexo", "sujeto"))
+```
+
+3.  Cuando variables son almacenadas en rows y columnas. Usamos `gather()` y `spread`
+
+```{r}
+lol <- lol_champs[,c("Champions", "Adaptive.type", "KDA_kills", "KDA_assists", "KDA_deaths")]
+lol <- gather(lol, KDA, valor, KDA_kills:KDA_deaths)
+head(spread(lol, Adaptive.type, valor))
+```
