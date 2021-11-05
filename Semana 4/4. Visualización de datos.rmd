@@ -86,7 +86,7 @@ hist(rnorm(10000, 20,5), breaks = 50)
 
 ## Gráfica de barras
 ```{r, warning=FALSE, message=FALSE}
-estatus <- read.csv("./Semana 4/covid/capacidadcovid19CDMX.csv")
+estatus <- read.csv("./covid/capacidadcovid19CDMX.csv")
 barplot(table(estatus$Estatus_capacidad_hospitalaria[estatus$Estatus_capacidad_hospitalaria==c("BUENA", "MEDIA")]),
         main = "estatus", ylab = "no de hospitales")
 barplot(c(6,9,6,4,8,3))
@@ -95,6 +95,7 @@ barplot(c(6,9,6,4,8,3))
 ## Diagramas de dispersión
 comparar una variable vs otra. Se utiliza para ver relaciones entre variables. se utiliza la función `plot()`
 ```{r}
+lol.champs <- read.csv("./data/lol_champs.csv")
 plot(control, experimental)
 plot(lol.champs$HP)
 plot(lol.champs$AD, as.numeric(gsub("%", "", lol.champs$Winrate)), ylab = "winrate")
@@ -108,19 +109,25 @@ plot(airquality$Wind~airquality$Month)
 ```
 
 ## Funciones de graficado.
+Las funciones de graficado nos permiten modificar una gráfica que nosotro convoquemos. 
 ### lines
 Une los puntos de cada valor por una línea. 
 ```{r}
 plot(c(5,8,9,15,20), type = "n")
 lines(c(5,8,9,15,20))
-plot(tapply(airquality$Wind,airquality$Month, mean), type = "n")
+plot(tapply(airquality$Wind, airquality$Month, mean), type = "n")
 lines(tapply(airquality$Wind,airquality$Month, mean))
 ```
 
-Cuando quiero líneas de un solo subset
+Cuando quiero líneas de un solo subset de datos.
 ```{r}
-plot(airquality$Day,airquality$Wind, type = "n")
+## paso 1. Graficar ambas variables sin extraer algún grupo en particular
+plot(airquality$Day,airquality$Wind, type="n")
+## paso 2. Graficar el més que yo quiera.
 with(subset(airquality, Month=="Mayo"), lines(Day, Wind))
+
+## ejemplo 2
+plot(airquality$Day,airquality$Wind, type = "n")
 with(subset(airquality, Month=="Agosto"), lines(Day, Wind))
 
 ##SINONIMO
@@ -134,9 +141,14 @@ traza una línea en donde yo le pida.
 ```{r}
 plot(airquality$Wind,airquality$Ozone)
 abline(v=max(airquality$Wind))
+abline(v=10)
 abline(h=mean(airquality$Ozone))
 
-hist(rnorm(10000))
+##Trazando una linea de regresión.
+plot(airquality$Wind,airquality$Ozone)
+abline(lm(airquality$Ozone~airquality$Wind))
+
+hist(rnorm(10000), freq = F)
 abline(v=c(-2,2))
 ```
 
@@ -148,11 +160,12 @@ points(airquality$Ozone, airquality$Wind)
 ##sólo un grupo de puntos
 with(airquality, plot(Wind, Ozone, type="n"))
 with(subset(airquality, Month=="Mayo"), points(Wind, Ozone))
+
 ##meses específicos
 data <- airquality[airquality$Month %in% c("Mayo", "Agosto"),]
 plot(data$Wind, data$Ozone, type = "n")
 #puntos de agosto
-points(data[data$Month=="Agosto", "Wind"],data[data$Month=="Agosto", "Ozone"] )
+points(data[data$Month=="Agosto", "Wind"],data[data$Month=="Agosto", "Ozone"])
 ##EQUIVALENTE A LA GRAFICA ANTERIOR
 with(airquality[airquality$Month %in% c("Mayo", "Agosto"),], 
      plot(Wind, Ozone, type = "n"))
@@ -160,11 +173,12 @@ with(airquality[airquality$Month %in% c("Mayo", "Agosto"),],
 with(subset(airquality, Month == "Agosto"), points(Wind, Ozone))
 ```
 
-Podemos también agregar los puntos a una serie de boxplots o a un boxplot. Para ello, hacemos uso de la función `stripchart`. Sus argumentos escenciales son los siguientes:
+Podemos también agregar los puntos a una serie de boxplots o a un boxplot. Para ello, hacemos uso de la función `stripchart()`. Sus argumentos escenciales son los siguientes:
 
         stripchart(data or formula, method = "", vertical= TRUE, add=TRUE, pch=1)
 ```{r}
-boxplot(airquality$Wind)
+boxplot(airquality$Wind, outline = FALSE, ylim=c(0,max(airquality$Wind)))
+
 stripchart(airquality$Wind, method = "jitter", vertical = TRUE, add = TRUE, pch=1)
 
 ## puntos a una serie de boxplots
@@ -173,16 +187,21 @@ stripchart(airquality$Temp~airquality$Month, method = "jitter", vertical = TRUE,
 ```
 
 ### text
+Añade texto a cada punto distribuido en la grafica. 
 ```{r}
-plot(c(3,6,8,10,20), c(4,6,9,6,5), xlab = "x", ylab = "y", ylim = c(0,10))
+plot(c(3,6,8,10,20), c(4,6,9,6,5),pch=20, xlab = "x", ylab = "y", ylim = c(0,10))
 text(c(3,6,8,10,20), c(4,6,9,6,5)+.7, labels = c("sj1", "sj2", "sj3", "sj4", "sj5"))
 ```
+
 ### title
+Agrega un título a la grafica y a los ejes
 ```{r}
 boxplot(Ozone~Month, data = airquality, ylab = "", xlab = "")
 title(main = "Calidad del aire", xlab = "Meses", ylab = "Ozono")
 ```
+
 ### mtext
+Agrega texto a la gráfica, dentro de los márgenes o fuera de los margenes de la misma.
 ```{r}
 boxplot(Ozone~Month, data = airquality, main="calidad del aire", xlab = "Meses", ylab = "Ozono")
 mtext("hola que hace", 3)
@@ -190,73 +209,129 @@ mtext("hola que hace", 3)
 
 ### Algunas funciones se pueden aplicar directamente en las funciones de graficado
 ```{r}
-with(airquality[airquality$Month %in% c("Mayo", "Agosto"),], 
-     plot(Wind, Ozone, main = "calidad del aire", xlab = "viento", ylab = "Ozono", type = "o" ))
+with(airquality[airquality$Month %in% c("Agosto"),], 
+     plot(Day, Ozone, main = "Calidad del aire", xlab = "Día", ylab = "Ozono", type = "o"))
 ```
 
 ## Parámetros de graficado
+Nos ayudan a personalizar nuestras gráficas
 ### pch
+cambia la forma del punto a graficar
 ```{r}
 plot(data$Wind, data$Ozone, pch=20)
+plot(data$Wind, data$Ozone, type = "n")
+points(data$Wind, data$Ozone, pch=14)
 ```
 ### lty
+el tipo de línea "line type(lty)"
 ```{r}
 plot(data$Wind, data$Ozone, pch=20)
 abline(h=50, lty=2)
 ```
 ### lwd
+el grosor de la línea
 ```{r}
 plot(data$Wind, data$Ozone, pch=20)
 abline(h=50, lty=2, lwd=2)
 ```
 ### col
+cambias el color de los elementos en las gráficas. Podemos cambiar el color de las líneas, los puntos, las etiquetas, etc.
 ```{r}
+##ejemplo 1
 plot(data$Wind, data$Ozone, pch=20, col="red")
-abline(h=50, lty=2, lwd=1)
+abline(h=50, lty=2, lwd=2)
 
-plot(data$Wind, data$Ozone, type="n")
+##ejemplo 2 agrego puntos de cada mes con diferente color y forma
+plot(data$Wind, data$Ozone, type = "n")
 points(data[data$Month=="Agosto", "Wind"],
        data[data$Month=="Agosto", "Ozone"], col="blue", pch=20)
 points(data[data$Month=="Mayo", "Wind"],
        data[data$Month=="Mayo", "Ozone"], col="red", pch=1)
 
+##Puedo agregarle colores a cada grupo de puntos (de cada mes) utilizando la variable categórica en el argumento "col"
 plot(data$Wind, data$Ozone, pch=16, col=data$Month)
+plot(airquality$Wind, airquality$Ozone, pch=20, col=airquality$Month)
 ```
 
 ### xlim
+establece el límite del eje x.
+```{r}
+plot(airquality$Temp, xlim = c(0,150))
+```
+
 ### ylim
+etablece el limite del eje y.
+```{r}
+boxplot(airquality$Temp, ylim=c(0,150))
+```
+
 ### legend
+agregamos etiquetas para saber qué puntos corresponden a qué grupo.
 ```{r}
 plot(data$Wind, data$Ozone, type="n", xlab = "viento", ylab = "Ozone")
 points(data[data$Month=="Agosto", "Wind"],
        data[data$Month=="Agosto", "Ozone"], col="blue", pch=20)
 points(data[data$Month=="Mayo", "Wind"],
        data[data$Month=="Mayo", "Ozone"], col="red", pch=1)
+
 legend("topright", legend = c("Mayo", "Agosto"), pch = c(1,20), col = c("red", "blue"))
-?legend
+
+##EJEMPLO 2
+plot(airquality$Day,airquality$Wind, type="n")
+with(subset(airquality, Month=="Mayo"), lines(Day, Wind))
+with(subset(airquality, Month=="Agosto"), lines(Day, Wind, col="red2"))
+legend("topleft", legend = c("Mayo", "Agosto"),lty = c(1,1), col = c("black", "red2"))
 ```
 
 
 ### Función par()
 `par()`: Especifica parámetros gráficos globales que van a afectar a todas las gráficas. 
 sus parámetros 
-- **las**: Indica la orientación de las etiquetas en la gráfica
+- **las**: Indica la orientación de las etiquetas en las gráfica. Valor 0= paralelo al eje, 1= siempre horizontal, 2=siempre perpendicular al eje, 3= siempre vertical
 ```{r}
-?par
-par(las=)
+par(las=2)
 boxplot(Ozone~Month, data = airquality)
 ```
 
-- **bg**
-- **mar**
-- **omar**
-- **mfrow** y **mfcol**
+- **bg**: Color de fondo
+```{r}
+par(bg="blue")
+with(airquality, plot(Wind, Ozone))
+```
+
+- **mar**: Tamaño de los márgenes. 
+```{r}
+par(mar=c(4,4,1,1))
+with(airquality, plot(Wind, Ozone))
+```
+
+- **mfrow** y **mfcol**: Cuantas graficas quieres por página. Es una matriz de gráficas
+```{r}
+par(mfrow=c(2,2))
+boxplot(airquality$Temp)
+plot(airquality$Ozone, airquality$Wind)
+plot(airquality$Temp)
+boxplot(airquality$Temp~airquality$Month)
+```
+
+- **oma**: Margen exterior cuando tienes varias graficas en una página
+```{r}
+par(mar=c(4,4,2,2), oma=c(0,0,2,0))
+boxplot(airquality$Temp, main="graf1")
+plot(airquality$Ozone, airquality$Wind, main = "graf2")
+plot(airquality$Temp)
+boxplot(airquality$Temp~airquality$Month)
+title(main = "GRAFICAS", outer = TRUE)
+mtext("GRAFICAS", outer = TRUE)
+```
+
 ## Gráfica de Violín
-Son una alternativa a los diagramas de cajas y bigotes. Nos muestran la densidad de la distribución de los datos. Haremos uso del paquete vioplot. 
+Son una alternativa a los diagramas de cajas y bigotes. Nos muestran la densidad de la distribución de los datos. Son útiles cuando tenemos una gran cantidad de datos. Haremos uso del paquete vioplot. 
 
 Su principio es el siguiente. Nos muestra la distribución de la función de densidad acumulativa de una serie de datos. 
 
-```{r}
+```{r, message=FALSE}
+library(vioplot)
 x <- rnorm(100000) 
 hist(x, freq = F)
 lines(density(x), col="red", lwd=2)
@@ -266,14 +341,15 @@ vioplot(x, horizontal = TRUE, yaxt = "n", axes = FALSE, col = rgb(0,.5,.7, alpha
 
 Podemos pasar un vector a la función vioplot. o incluso al igual que un boxplot, hacer varios grupos. 
 ```{r, message=FALSE}
-library(vioplot)
 vioplot(airquality$Solar.R)
 
 ##por diferentes grupos
+par(las=2)
 vioplot(airquality$Wind~airquality$Month, xlab = "meses", ylab = "Viento")
 ```
 
 Incluso podemos personalizar las gráficas de violin. utilizando los siguientes parámetros. 
+
 - **col**: color del área de la densidad
 - **rectCol**: color del rectángulo
 - **lineCol**: color de la línea
@@ -286,46 +362,197 @@ vioplot(airquality$Solar.R, col = 4)
 ## rectCol
 vioplot(airquality$Solar.R, col = 4, rectCol = "red")
 ## lineCol
-vioplot(airquality$Solar.R, col = 4, rectCol = "red", lineCol = 15)
+vioplot(airquality$Solar.R, col = 4, rectCol = "red", lineCol = 14)
 ## colMed
-vioplot(airquality$Solar.R, col = 4, rectCol = "red", lineCol = 15, colMed = "black")
+vioplot(airquality$Solar.R, col = 4, rectCol = "red", lineCol = 14, colMed = "black")
 ## border
-vioplot(airquality$Solar.R, col = 4, rectCol = "red", lineCol = 15, colMed = "black", border = "red3" )
+vioplot(airquality$Solar.R, col = 4, rectCol = "red", lineCol = 14, colMed = "black", border = "red3" )
 ```
 
 Le aplicamos los parámetros a una serie de vioplots.
 ```{r}
-vioplot(airquality$Ozone~airquality$Month, col = seq_len(length(levels(airquality$Month))), rectCol=c("white", 1,1,1,1), lineCol=c(0,1,1,1,1), colMed = c("gray",0,0,0,0))
+vioplot(airquality$Ozone~airquality$Month, col = 1:5, rectCol=c("white", 1,1,1,1), lineCol=c(0,1,1,1,1), colMed = c("gray",0,0,0,0))
 ```
-
 
 Al igual que un diagrama de cajas y bigotes, yo puedo añadirle los puntos a la gráfica.
 ```{r}
-vioplot(airquality$Solar.R, col = 4, rectCol = "red", lineCol = 15, colMed = "black", border = "red3" )
+vioplot(airquality$Solar.R, col = 4)
 stripchart(airquality$Solar.R, add = TRUE, method = "jitter", pch = 20, vertical = TRUE, col = rgb(.2,.4,.7))
 ```
 
 Igual a una serie de graficas.
 ```{r}
-vioplot(airquality$Ozone~airquality$Month, col = seq_len(length(levels(airquality$Month))), rectCol=c("white", 1,1,1,1), lineCol=c(0,1,1,1,1), colMed = c("gray",0,0,0,0))
+vioplot(airquality$Wind~airquality$Month, col = 1:5, rectCol=c("white", 1,1,1,1), lineCol=c(0,1,1,1,1), colMed = c("gray",0,0,0,0))
 
 x <- seq(0,1, by=.1)
 
-stripchart(airquality$Ozone~airquality$Month, add = TRUE, method = "jitter", pch = 20, vertical = TRUE, col=rgb(sample(x,3),sample(x,1),sample(x,1)))
+stripchart(airquality$Wind~airquality$Month, add = TRUE, method = "jitter", pch = 20, vertical = TRUE, col=rgb(sample(x,3),sample(x,1),sample(x,1)))
+
+
 ```
 
 PARA MÁS INFORMACIÓN DE GRÁFICAS DE VIOLÍN CLICK [AQUÍ](https://r-coder.com/violin-plot-en-r/)
 
 ## Dispositivos gráficos y exportación
-```{r}
-png("./plots/grafica1")
+Son necesarios para visualizar gráficas. Pueden ser:
+- Una ventana en tu PC
+- un archivo PDF
+- Un PNG o JPEG.
+
+La aproximación más común para exportar gráficas es la siguiente. 
+1. Cargar un dispositivo gráfico específico (PDF, JPEG, PNG, ETC)
+2. Convocar una función de graficado
+3. hacer las modificaciones que deseemos dentro de la gráfica
+4. **CERRAR EL DISPOSITIVO GRÁFICO**
+
+Es recomendable crear el código antes de guardarlo en un archivo.
+
+```{r, eval=FALSE}
+png("./Semana 4/plots/grafica1.png")
 plot(data$Wind, data$Ozone, type="n", xlab = "viento", ylab = "Ozone")
 points(data[data$Month=="Agosto", "Wind"],
        data[data$Month=="Agosto", "Ozone"], col="blue", pch=20)
 points(data[data$Month=="Mayo", "Wind"],
        data[data$Month=="Mayo", "Ozone"], col="red", pch=1)
 legend("topright", legend = c("Mayo", "Agosto"), pch = c(1,20), col = c("red", "blue"))
+dev.off() ##CERRAMOS EL DISPOSITIVO GRÁFICO
+
+##ejemplo 2
+pdf("./Semana 4/plots/grafica2.pdf")
+vioplot(airquality$Wind~airquality$Month, col = 1:5, rectCol=c("white", 1,1,1,1), lineCol=c(0,1,1,1,1), colMed = c("gray",0,0,0,0))
+x <- seq(0,1, by=.1)
+stripchart(airquality$Wind~airquality$Month, add = TRUE, method = "jitter", pch = 20, vertical = TRUE, col=rgb(sample(x,3),sample(x,1),sample(x,1)))
+dev.off()
+```
+
+Hay 2 tipos básicos de dispositivos gráficos. Los vectores y los bitmaps.
+
+### Vectores
+Gráficas con líneas. 
+- pdf: útil para gráficas con lineas como barras, diagramas de dispersión, líneas de regresión, etc. No distorsiona el archivo cuando se ajusta el tamaño. No es muy eficiente si tiene muchos puntos o muchos objetos. 
+
+### Bitmap: serie de pixeles
+- png: Bueno para líneas dibujadas o imágenes con colores sólidos. No tiene perdidad de compresión, se lee en muchos navegadores, es bueno para graficar una gran cantidad de puntos. **NO AJUSTA BIEN EL TAMAÑO**
+
+- JPEG: Bueno para fotografías o escenas naturales. Es bueno para graficar muchos puntos. **NO AJUSTA BIEN EL TAMAÑO**. Se puede leer en casi cualquier PC y navegador. No es bueno para dibujar líneas.
+
+## Paquete ggplot2
+Es una paquete que implementa la gramatica de las gráficas. Es decir, creas una gráfica como si estuvieras utilizando reglas para armar una gráfica. 
+
+GGPLOT2 no es compatible con el sistema de graficado del R base. Por lo tanto se ocupa uno u otro, no ambos al mismo tiempo. 
+
+- **plots**: Se componen de una estética y geoms 
+- **aesthetics**: forma, tamaño, color, etc.
+- **Geoms**: puntos, líneas, barras, etc.
+
+Las variables categóricas son importantes para indicar el subset de los datos y cada nivel es recomendable que tenga una etiqueta. 
+
+La función clave es `ggplot()` y `qplot()`.
+
+### Función "qplot()"
+Es el análogo a la función `plot()` del sistema base.
+Es útil para algunas cosas, pero esconde muchos detalles. Sirve para hacer revisiones rápidas. 
+
+- Revisión rápida de nuestros datos. 
+```{r}
+library(ggplot2)
+qplot(Day, Wind, data = airquality)
+```
+
+- modificando la estética
+```{r}
+qplot(Day, Wind, data = airquality, color = Month)
+```
+
+- Añadiendo un geom: Un estadístico
+```{r}
+qplot(Day, Wind, data = airquality, geom = c("point", "smooth"))
+```
+
+- Histogramas
+```{r}
+qplot(Temp, data = airquality, fill=Month)
+```
+
+- Facets. El equivalente a los parámetros mfrow y mfcol.
+```{r}
+qplot(Day, Temp, data = airquality, facets = .~Month)
+qplot(Day, Temp, data = airquality, facets = Month~., geom = "line", color=Month)
+```
+
+- Densidad de un histograma.
+```{r}
+qplot(Wind, data = data, geom = "density")
+qplot(Wind, data=data, geom = "density", color=Month)
+```
+
+- Diagramas de dispersión.
+```{r}
+qplot(Day, Wind, data = data)
+qplot(Day, Wind, data = data, shape=Month)
+qplot(Day, Wind, data = data, color=Month)
+
+##AGREGANDO UNA LÍNEA DE REGRESION
+qplot(Day, Wind, data = data, color=Month)+geom_smooth(method = "lm")
+## Separando las gráficas.
+qplot(Day, Wind, data = data, color=Month, facets = .~Month)+geom_smooth(method = "lm")
+```
+
+### Función "ggplot()"
+Implementa la gramática de las gráficas. Nos permite construír gráficas casi totalmente personalizadas. 
+
+Componentes básicos:
+- Data frame: TODOS LOS DATOS (ya ordenados)
+- Estética: Cómo estan coloreados los datos, tamaño, forma, etc.
+- Geoms: objetos geométricos, puntos, líneas, formas. 
+- Facets: graficas a las que les agregué una tercera variable. 
+- Stats: Transformaciones estadísticas, como cuantiles, líneas de regresión, medias, etc. 
+- Escalas: Que escala utiliza un mapa estético. P.E. Octubre = rojo y agosto = azul
+- Sistema de coordenadas: Representación numérica en cada un de los ejes.
+
+**CONSTRUYENDO GRÁFICAS**
+En ggplot añades pieza por pieza hasta armar tu gráfica. Las gráficas se constuyen en capas. 
+
+1. Mirar a los datos (head(data))
+2. Establecer ggplot como la función inicial. 
+```{r}
+ggdata <- ggplot(data = airquality, aes(Day, Wind))
+print(ggdata) ## No hay capas
+```
+
+3. Añadir las capas de ggplot
+```{r}
+##lienzo    capa1                 capa2                   Capa 3
+ggdata + geom_point() + geom_smooth(method = "lm")+ facet_grid(.~Month) + xlab("Días")+ylab("Viento")+ggtitle("Calidad del aire")+theme_bw() ### AÑADIMOS CAPAS Y CAMBIAMOS NOMBRE A LAS ETIQUETAS.
+```
+
+4. Modificando la estética
+```{r}
+## COLOR DE LOS PUNTOS EN GEOM_POINT
+ggdata + geom_point(color="blue", size = 4, alpha = .4) + geom_smooth(method = "lm")+ facet_grid(.~Month) + xlab("Días")+ylab("Viento")+ggtitle("Calidad del aire")+theme_bw()
+
+## COLOR DE LOS PUNTOS DIVIDIDOS EN UNA VARIABLE CATEGÓRICA
+
+ggdata + geom_point(aes(color=Month), size=2, alpha=.4) + geom_smooth(method = "lm")+ facet_grid(.~Month) + xlab("Días")+ylab("Viento")+ggtitle("Calidad del aire")+theme_bw()
+```
+
+5. Modificando la línea de tendencia. 
+```{r}
+ggdata + geom_point(aes(color=Month), size=2, alpha=.4) + geom_smooth(method = "lm", size=2, linetype=2, se=FALSE, aes(color=Month))+ facet_grid(.~Month) +  xlab("Días")+ylab("Viento")+ggtitle("Calidad del aire")+theme_bw()
+```
+
+6. VIENDO X y Y en dos variables categóricas. 
+```{r, echo=FALSE}
+## Creando una nueva variable categórica
+years <- rep(c(2020, 2021), times=c(22, 25))
+years <- sample(years, 47)
+data$Years <- years
+```
+
+```{r}
+## Graficando 2 variables categóricas con facet grid.
+ggdata2 <- ggplot(data = data, aes(Day, Wind))
+ggdata2 + geom_point(aes(color=Month),alpha=.4)+facet_grid(Years~Month)
 ```
 
 
-## Paquete ggplot2
